@@ -1,0 +1,6 @@
+apiVersion: v1
+kind: ConfigMapList
+items:
+{{ toYaml .Values.grafana.ingress.configjson | indent 1 }}
+
+

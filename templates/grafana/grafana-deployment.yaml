@@ -1,0 +1,169 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  labels:
+    app: grafana
+  name: grafana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      containers:
+      - image: feiyu563/prometheus-grafana:5.2.1
+        name: grafana
+        env:
+        # - name: GF_SECURITY_ADMIN_USER
+          # valueFrom:
+            # secretKeyRef:
+              # name: grafana-credentials
+              # key: user
+        # - name: GF_SECURITY_ADMIN_PASSWORD
+          # valueFrom:
+            # secretKeyRef:
+              # name: grafana-credentials
+              # key: password
+        - name: GF_SECURITY_ADMIN_USER
+          value: "admin"
+        - name: GF_SECURITY_ADMIN_PASSWORD
+          value: "y6hWR7eepCN1"
+        ports:
+        - containerPort: 3000
+          name: http
+        resources:
+          limits:
+            cpu: 200m
+            memory: 200Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        volumeMounts:
+        - mountPath: /var/lib/grafana
+          name: grafana-storage
+          readOnly: false
+        - mountPath: /etc/grafana/provisioning/datasources
+          name: grafana-datasources
+          readOnly: false
+        - mountPath: /etc/grafana/provisioning/dashboards
+          name: grafana-dashboards
+          readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/analysis-by-pod
+          name: analysis-by-pod
+          readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/k8s-node-rsrc-use
+          name: grafana-dashboard-k8s-node-rsrc-use
+          readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/k8s-resources-cluster
+          name: grafana-dashboard-k8s-resources-cluster
+          readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/k8s-resources-namespace
+          name: grafana-dashboard-k8s-resources-namespace
+          readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/k8s-resources-pod
+          name: grafana-dashboard-k8s-resources-pod
+          readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/nodes
+          name: grafana-dashboard-nodes
+          readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/pods
+          name: grafana-dashboard-pods
+          readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/statefulset
+          name: grafana-dashboard-statefulset
+          readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/traefik
+          name: grafana-dashboard-traefik
+          readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/etcd
+          name: grafana-dashboard-etcd
+          readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/mysql
+          name: grafana-dashboard-mysql
+          readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/kubernetes-cluster-health
+          name: kubernetes-cluster-health
+          readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/kubernetes-cluster-monitoring-pods
+          name: kubernetes-cluster-monitoring-pods
+          readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/kubernetes-capacity
+          name: kubernetes-capacity
+          readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/kubernetes-cluster-status
+          name: kubernetes-cluster-status
+          readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/kubernetes-pods
+          name: kubernetes-pods
+          readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/kubernetes-app-metrics
+          name: kubernetes-app-metrics
+          readOnly: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+      serviceAccountName: grafana
+      volumes:
+      - emptyDir: {}
+        name: grafana-storage
+      - name: grafana-datasources
+        configMap:
+          name: grafana-datasources
+      - configMap:
+          name: grafana-dashboards
+        name: grafana-dashboards
+      - configMap:
+          name: analysis-by-pod
+        name: analysis-by-pod
+      - configMap:
+          name: grafana-dashboard-k8s-node-rsrc-use
+        name: grafana-dashboard-k8s-node-rsrc-use
+      - configMap:
+          name: grafana-dashboard-k8s-resources-cluster
+        name: grafana-dashboard-k8s-resources-cluster
+      - configMap:
+          name: grafana-dashboard-k8s-resources-namespace
+        name: grafana-dashboard-k8s-resources-namespace
+      - configMap:
+          name: grafana-dashboard-k8s-resources-pod
+        name: grafana-dashboard-k8s-resources-pod
+      - configMap:
+          name: grafana-dashboard-nodes
+        name: grafana-dashboard-nodes
+      - configMap:
+          name: grafana-dashboard-pods
+        name: grafana-dashboard-pods
+      - configMap:
+          name: grafana-dashboard-statefulset
+        name: grafana-dashboard-statefulset
+      - configMap:
+          name: grafana-dashboard-traefik
+        name: grafana-dashboard-traefik
+      - configMap:
+          name: grafana-dashboard-etcd
+        name: grafana-dashboard-etcd
+      - configMap:
+          name: grafana-dashboard-mysql
+        name: grafana-dashboard-mysql
+      - configMap:
+          name: kubernetes-cluster-health
+        name: kubernetes-cluster-health
+      - configMap:
+          name: kubernetes-cluster-monitoring-pods
+        name: kubernetes-cluster-monitoring-pods
+      - configMap:
+          name: kubernetes-capacity
+        name: kubernetes-capacity
+      - configMap:
+          name: kubernetes-cluster-status
+        name: kubernetes-cluster-status
+      - configMap:
+          name: kubernetes-pods
+        name: kubernetes-pods
+      - configMap:
+          name: kubernetes-app-metrics
+        name: kubernetes-app-metrics

@@ -1,0 +1,46 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  labels:
+    app: dingding
+    alertname: DeadMansSwitch
+  name: dingding
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dingding
+      alertname: DeadMansSwitch
+  template:
+    metadata:
+      labels:
+        app: dingding
+        alertname: DeadMansSwitch
+    spec:
+      containers:
+      - image: feiyu563/prometheus-dingding:0.6
+        name: dingding
+        ports:
+        - containerPort: 8080
+          name: http
+        resources:
+          limits:
+            cpu: 200m
+            memory: 200Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    alertname: DeadMansSwitch
+  name: dingding
+spec:
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+  selector:
+    app: dingding

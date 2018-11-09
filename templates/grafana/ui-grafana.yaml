@@ -1,0 +1,15 @@
+{{- if .Values.grafana.ingress.enabled -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: grafana.datafountain.cn
+spec:
+  rules:
+  - host: {{ .Values.grafana.ingress.host }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: grafana
+          servicePort: 3000
+{{- end -}}
