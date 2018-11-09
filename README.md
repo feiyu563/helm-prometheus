@@ -35,7 +35,7 @@
 ## 快速部署
 
 ```console
-$ git clone 
+$ git clone https://github.com/feiyu563/helm-prometheus.git
 $ helm install --name my-prometheus --namespace monitoring ./prometheus
 ```
 
